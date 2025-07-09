@@ -23,16 +23,10 @@ public class LoginService  {
         loginRepo.save(login);
     }
 
-    public List<LoginDTO> getUser(String email){
-        Optional<LoginEntity> loginEntity = loginRepo.findByEmail(email);
-        return loginEntity.map(entity -> {
-            LoginDTO dto = new LoginDTO();
-            dto.setEmail(entity.getEmail());
-            dto.setName(entity.getName());
-            dto.setSurname(entity.getSurname());
-            // No password set for security reasons
-            return Collections.singletonList(dto); // Return a list with one item
-        }).orElse(Collections.emptyList());
+    public Boolean loginAuth(String email, String password) {
+        return loginRepo.findByEmail(email)
+                .map(user -> user.getPassword().equals(password))
+                .orElse(false);
     }
 
 
